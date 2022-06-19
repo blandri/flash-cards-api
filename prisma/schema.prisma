@@ -21,6 +21,7 @@ model Card{
   id Int @id @default(autoincrement())
   title String
   details String
+  done Boolean @default(false)
 }
 
 model Category{

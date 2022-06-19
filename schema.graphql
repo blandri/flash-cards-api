@@ -4,6 +4,7 @@
 
 type Card {
   details: String!
+  done: Boolean!
   id: Int!
   title: String!
 }
@@ -16,6 +17,8 @@ type Category {
 type Mutation {
   createCard(details: String!, title: String!): Card!
   createCategory(name: String!): Category!
+  deleteCard(id: Int!): Card!
+  markDone(id: Int!): Card!
   signup(email: String!, name: String!, password: String!): User!
 }
 

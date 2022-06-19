@@ -30,6 +30,7 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   Card: { // root type
     details: string; // String!
+    done: boolean; // Boolean!
     id: number; // Int!
     title: string; // String!
   }
@@ -60,6 +61,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 export interface NexusGenFieldTypes {
   Card: { // field return type
     details: string; // String!
+    done: boolean; // Boolean!
     id: number; // Int!
     title: string; // String!
   }
@@ -70,6 +72,8 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createCard: NexusGenRootTypes['Card']; // Card!
     createCategory: NexusGenRootTypes['Category']; // Category!
+    deleteCard: NexusGenRootTypes['Card']; // Card!
+    markDone: NexusGenRootTypes['Card']; // Card!
     signup: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
@@ -87,6 +91,7 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   Card: { // field return type name
     details: 'String'
+    done: 'Boolean'
     id: 'Int'
     title: 'String'
   }
@@ -97,6 +102,8 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createCard: 'Card'
     createCategory: 'Category'
+    deleteCard: 'Card'
+    markDone: 'Card'
     signup: 'User'
   }
   Query: { // field return type name
@@ -119,6 +126,12 @@ export interface NexusGenArgTypes {
     }
     createCategory: { // args
       name: string; // String!
+    }
+    deleteCard: { // args
+      id: number; // Int!
+    }
+    markDone: { // args
+      id: number; // Int!
     }
     signup: { // args
       email: string; // String!

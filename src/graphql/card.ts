@@ -7,6 +7,7 @@ export const Card = objectType({
         t.nonNull.int("id"); 
         t.nonNull.string("title"); 
         t.nonNull.string("details");
+        t.nonNull.boolean("done");
     },
 });
 
@@ -19,9 +20,9 @@ export const CardQuery = extendType({
 
             async resolve(parent, args, context) {
                
-                    const card= await context.prisma.card.findMany()
+                    const cards= await context.prisma.card.findMany()
 
-                return card
+                return cards
             },
         });
     },
@@ -49,6 +50,46 @@ export const CardMutation= extendType({
                 })
                 return newCard;
             },
+        }),
+
+        t.nonNull.field("deleteCard",{
+            type:"Card",
+            args:{
+                id: nonNull(intArg())
+            },
+
+            async resolve(parent, args, context) {    
+                const { id } = args;  // 4
+                
+                const deletedCard= await context.prisma.card.delete({
+                    where:{
+                        id
+                    }
+                })
+
+                return deletedCard;
+            },
+        }),
+
+        t.nonNull.field("markDone",{
+            type:"Card",
+            args:{
+                id:nonNull(intArg())
+            },
+
+            async resolve(parent,args,context){
+                const {id}=args
+                const doneCard= await context.prisma.card.update({
+                    where:{
+                        id
+                    },
+                    data:{
+                        done: true
+                    }
+                })
+
+                return doneCard
+            }
         })
     }
 })
