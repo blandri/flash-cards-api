@@ -8,8 +8,20 @@ type Card {
   title: String!
 }
 
+type Category {
+  id: Int!
+  name: String!
+}
+
+type Mutation {
+  createCard(details: String!, title: String!): Card!
+  createCategory(name: String!): Category!
+  signup(email: String!, name: String!, password: String!): User!
+}
+
 type Query {
-  allCards: [Card]
+  allCards: [Card!]!
+  allCategories: [Category!]!
 }
 
 type User {

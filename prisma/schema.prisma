@@ -22,3 +22,8 @@ model Card{
   title String
   details String
 }
+
+model Category{
+  id Int @id @default(autoincrement())
+  name String @unique
+}
