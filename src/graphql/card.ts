@@ -20,9 +20,9 @@ export const CardQuery = extendType({
 
             async resolve(parent, args, context) {
                
-                    const cards= await context.prisma.card.findMany()
+                    const card= await context.prisma.card.findMany()
 
-                return cards
+                return card
             },
         });
     },
@@ -41,6 +41,11 @@ export const CardMutation= extendType({
 
             async resolve(parent, args, context) {    
                 const { title,details } = args;  // 4
+
+                const { userId } = context;
+                console.log(userId)
+                if (!userId) throw new Error("Login first");
+
                 
                 const newCard= await context.prisma.card.create({
                     data:{
@@ -60,6 +65,9 @@ export const CardMutation= extendType({
 
             async resolve(parent, args, context) {    
                 const { id } = args;  // 4
+                const { userId } = context;
+
+                if (!userId) throw new Error("Login first");
                 
                 const deletedCard= await context.prisma.card.delete({
                     where:{
@@ -79,6 +87,10 @@ export const CardMutation= extendType({
 
             async resolve(parent,args,context){
                 const {id}=args
+                const { userId } = context;
+
+                if (!userId) throw new Error("Login first");
+                
                 const doneCard= await context.prisma.card.update({
                     where:{
                         id
