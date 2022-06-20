@@ -8,7 +8,6 @@ type Auth {
 }
 
 type Card {
-  categories: [Category]!
   details: String!
   done: Boolean!
   id: Int!
@@ -24,12 +23,13 @@ type Category {
 }
 
 type Mutation {
-  createCard(details: String!, title: String!): Card!
+  createCard(category: String!, details: String!, title: String!): Card!
   createCategory(name: String!): Category!
   deleteCard(id: Int!): Card!
   login(email: String!, password: String!): Auth!
   markDone(id: Int!): Card!
   signup(email: String!, name: String!, password: String!): Auth!
+  updateCard(details: String, id: Int!, title: String): Card!
 }
 
 type Query {

@@ -21,7 +21,8 @@ model User{
 
 model Card{
   id Int @id @default(autoincrement())
-  categories Category[]   @relation(name: "categories")                  // many to many relationship
+  category Category? @relation(fields: [categoryId],references: [id])
+  categoryId Int?
   title String
   details String
   done Boolean @default(false)
@@ -32,7 +33,7 @@ model Card{
 model Category{
   id Int @id @default(autoincrement())
   name String @unique
-  cards Card[]   @relation(name: "categories") 
+  cards Card[] 
   ownerId Int?
   user User? @relation(fields: [ownerId], references: [id]) 
 }
