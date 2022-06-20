@@ -15,16 +15,25 @@ model User{
   name String
   email String @unique
   password String
+  cards Card[]
+  categories Category[]
 }
 
 model Card{
   id Int @id @default(autoincrement())
+  category Category? @relation(fields: [categoryId],references: [id])
+  categoryId Int?
   title String
   details String
   done Boolean @default(false)
+  ownerId Int?
+  user User? @relation(fields: [ownerId], references: [id])        // one to many relationship
 }
 
 model Category{
   id Int @id @default(autoincrement())
   name String @unique
+  cards Card[] 
+  ownerId Int?
+  user User? @relation(fields: [ownerId], references: [id]) 
 }

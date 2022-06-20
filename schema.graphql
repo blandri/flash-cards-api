@@ -12,20 +12,24 @@ type Card {
   done: Boolean!
   id: Int!
   title: String!
+  user: User
 }
 
 type Category {
+  cards: [Card]!
   id: Int!
   name: String!
+  user: User
 }
 
 type Mutation {
-  createCard(details: String!, title: String!): Card!
+  createCard(category: String!, details: String!, title: String!): Card!
   createCategory(name: String!): Category!
   deleteCard(id: Int!): Card!
   login(email: String!, password: String!): Auth!
   markDone(id: Int!): Card!
   signup(email: String!, name: String!, password: String!): Auth!
+  updateCard(details: String, id: Int!, title: String): Card!
 }
 
 type Query {
@@ -34,6 +38,8 @@ type Query {
 }
 
 type User {
+  cards: [Card]!
+  categories: [Category]!
   email: String!
   id: Int!
   name: String!

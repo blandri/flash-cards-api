@@ -14,7 +14,7 @@ export const context = ({ req }: { req: Request }): Context => {   // 2
         req && req.headers.authorization
             ? decodeAuthHeader(req.headers.authorization)
             : null;
-    console.log(token?.userId)
+    
     return {  
         prisma,
         userId: token?.userId, 
