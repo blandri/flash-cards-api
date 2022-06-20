@@ -4,23 +4,24 @@ import { Request } from "express";
 
 export const prisma = new PrismaClient();
 
-export interface Context {    // 1
+export interface Context {
     prisma: PrismaClient;
-    userId?: number;
+    userId?: number;  // 1
 }
-
-// export const context: Context = {   // 2
-//     prisma,
-// };
 
 export const context = ({ req }: { req: Request }): Context => {   // 2
     const token =
         req && req.headers.authorization
             ? decodeAuthHeader(req.headers.authorization)
             : null;
-
+    console.log(token?.userId)
     return {  
         prisma,
         userId: token?.userId, 
     };
 };
+
+
+// export const context: Context = {   // 2
+//     prisma,
+// };
