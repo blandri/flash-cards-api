@@ -10,7 +10,5 @@
     "outDir": "dist",
     "sourceMap": true,
     "esModuleInterop": true,
-    "baseUrl": "types",
-    "typeRoots": ["types"],
   }
 }
