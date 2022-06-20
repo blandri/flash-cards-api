@@ -68,14 +68,18 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Card: { // field return type
+    categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
     details: string; // String!
     done: boolean; // Boolean!
     id: number; // Int!
     title: string; // String!
+    user: NexusGenRootTypes['User'] | null; // User
   }
   Category: { // field return type
+    cards: Array<NexusGenRootTypes['Card'] | null>; // [Card]!
     id: number; // Int!
     name: string; // String!
+    user: NexusGenRootTypes['User'] | null; // User
   }
   Mutation: { // field return type
     createCard: NexusGenRootTypes['Card']; // Card!
@@ -90,6 +94,8 @@ export interface NexusGenFieldTypes {
     allCategories: NexusGenRootTypes['Category'][]; // [Category!]!
   }
   User: { // field return type
+    cards: Array<NexusGenRootTypes['Card'] | null>; // [Card]!
+    categories: Array<NexusGenRootTypes['Category'] | null>; // [Category]!
     email: string; // String!
     id: number; // Int!
     name: string; // String!
@@ -103,14 +109,18 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Card: { // field return type name
+    categories: 'Category'
     details: 'String'
     done: 'Boolean'
     id: 'Int'
     title: 'String'
+    user: 'User'
   }
   Category: { // field return type name
+    cards: 'Card'
     id: 'Int'
     name: 'String'
+    user: 'User'
   }
   Mutation: { // field return type name
     createCard: 'Card'
@@ -125,6 +135,8 @@ export interface NexusGenFieldTypeNames {
     allCategories: 'Category'
   }
   User: { // field return type name
+    cards: 'Card'
+    categories: 'Category'
     email: 'String'
     id: 'Int'
     name: 'String'

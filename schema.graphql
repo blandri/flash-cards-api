@@ -8,15 +8,19 @@ type Auth {
 }
 
 type Card {
+  categories: [Category]!
   details: String!
   done: Boolean!
   id: Int!
   title: String!
+  user: User
 }
 
 type Category {
+  cards: [Card]!
   id: Int!
   name: String!
+  user: User
 }
 
 type Mutation {
@@ -34,6 +38,8 @@ type Query {
 }
 
 type User {
+  cards: [Card]!
+  categories: [Category]!
   email: String!
   id: Int!
   name: String!

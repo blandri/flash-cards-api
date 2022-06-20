@@ -8,6 +8,22 @@ export const Card = objectType({
         t.nonNull.string("title"); 
         t.nonNull.string("details");
         t.nonNull.boolean("done");
+        t.field("user", {   // 1
+            type: "User",
+            resolve(parent, args, context) {  // 2
+                return context.prisma.card
+                    .findUnique({ where: { id: parent.id } })
+                    .user();
+            },
+        });
+        t.nonNull.list.field("categories", {  // 1
+            type: "Category",
+            resolve(parent,args,context){
+                return context.prisma.card
+                    .findUnique({ where: { id: parent.id } })
+                    .categories();
+            }
+        })  
     },
 });
 
@@ -19,8 +35,14 @@ export const CardQuery = extendType({
             type: "Card",
 
             async resolve(parent, args, context) {
+                const {userId}=context
+                if (!userId) throw new Error("Login first");
                
-                    const card= await context.prisma.card.findMany()
+                    const card= await context.prisma.card.findMany({
+                        where:{
+                            ownerId: userId
+                        }
+                    })
 
                 return card
             },
@@ -36,21 +58,22 @@ export const CardMutation= extendType({
             type:"Card",
             args:{
                 title: nonNull(stringArg()),
-                details: nonNull(stringArg())
+                details: nonNull(stringArg()),
             },
 
             async resolve(parent, args, context) {    
                 const { title,details } = args;  // 4
 
                 const { userId } = context;
-                console.log(userId)
+                
                 if (!userId) throw new Error("Login first");
 
                 
                 const newCard= await context.prisma.card.create({
                     data:{
                         title,
-                        details
+                        details,
+                        ownerId: userId,
                     }
                 })
                 return newCard;
@@ -71,7 +94,7 @@ export const CardMutation= extendType({
                 
                 const deletedCard= await context.prisma.card.delete({
                     where:{
-                        id
+                        id,
                     }
                 })
 

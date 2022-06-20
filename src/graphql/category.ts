@@ -5,7 +5,23 @@ export const Category=objectType({
     name: "Category",
     definition(t){
         t.nonNull.int("id"),
-        t.nonNull.string("name")
+        t.nonNull.string("name"),
+        t.nonNull.list.field("cards", {  // 1
+            type: "Card",
+            resolve(parent,args,context){
+                return context.prisma.category
+                    .findUnique({ where: { id: parent.id } })
+                    .cards();
+            }
+        }),
+        t.field("user", {   // 1
+            type: "User",
+            resolve(parent, args, context) {  // 2
+                return context.prisma.category
+                    .findUnique({ where: { id: parent.id } })
+                    .user();
+            },
+        });
     }
 })
 
@@ -32,10 +48,14 @@ export const CategoryMutation= mutationType({
             },
 
             async resolve(parent,args,context){
+                const {userId}=context
+                if (!userId) throw new Error("Login first");
+
                 const {name}=args
                 const newCategory= await context.prisma.category.create({
                     data:{
-                        name
+                        name,
+                        ownerId: userId
                     }
                 })
 
