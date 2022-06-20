@@ -8,6 +8,7 @@ type Auth {
 }
 
 type Card {
+  categoryId: Int
   details: String!
   done: Boolean!
   id: Int!
