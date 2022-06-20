@@ -1,11 +1,8 @@
 import { extendType, mutationType, nonNull, objectType, stringArg } from "nexus";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
-import * as dotenv from"dotenv"
 import { prisma } from "@prisma/client";
 import {SECRET} from "../utils/authentication"
-
-dotenv.config()
 
 export const Auth= objectType({
     name:"Auth",
