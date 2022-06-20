@@ -2,6 +2,11 @@
 ### Do not make changes to this file directly
 
 
+type Auth {
+  token: String!
+  user: User!
+}
+
 type Card {
   details: String!
   done: Boolean!
@@ -18,8 +23,9 @@ type Mutation {
   createCard(details: String!, title: String!): Card!
   createCategory(name: String!): Category!
   deleteCard(id: Int!): Card!
+  login(email: String!, password: String!): Auth!
   markDone(id: Int!): Card!
-  signup(email: String!, name: String!, password: String!): User!
+  signup(email: String!, name: String!, password: String!): Auth!
 }
 
 type Query {
