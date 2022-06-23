@@ -21,8 +21,8 @@ model User{
 
 model Card{
   id Int @id @default(autoincrement())
-  category Category? @relation(fields: [categoryId],references: [id])
-  categoryId Int?
+  category Category? @relation(fields: [categoryName],references: [name])
+  categoryName String?
   title String
   details String
   done Boolean @default(false)

@@ -33,7 +33,7 @@ export interface NexusGenObjects {
     user: NexusGenRootTypes['User']; // User!
   }
   Card: { // root type
-    categoryId?: number | null; // Int
+    categoryName?: string | null; // String
     details: string; // String!
     done: boolean; // Boolean!
     id: number; // Int!
@@ -69,7 +69,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Card: { // field return type
-    categoryId: number | null; // Int
+    categoryName: string | null; // String
     details: string; // String!
     done: boolean; // Boolean!
     id: number; // Int!
@@ -111,7 +111,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Card: { // field return type name
-    categoryId: 'Int'
+    categoryName: 'String'
     details: 'String'
     done: 'Boolean'
     id: 'Int'

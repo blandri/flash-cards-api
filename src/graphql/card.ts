@@ -17,7 +17,7 @@ export const Card = objectType({
                     .user();
             },
         });
-        t.int("categoryId"); 
+        t.string("categoryName"); 
         // t.nonNull.list.field("category", {  // 1
         //     type: "Category",
         //     resolve(parent,args,context){
@@ -77,14 +77,21 @@ export const CardMutation= extendType({
                     }
                 })
 
-                if(!cat) throw new Error("Category you choosed dont exist, you can create it first");
+                if(!cat) {
+                    const newCategory= await context.prisma.category.create({
+                        data:{
+                            name: category,
+                            ownerId: userId
+                        }
+                    })
+                }
 
                 const newCard= await prisma.card.create({
                     data:{
                         title,
                         details,
                         ownerId: userId,
-                        categoryId: cat.id ,
+                        categoryName: category
                     }
                 })
                 return newCard;
