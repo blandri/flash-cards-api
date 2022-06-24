@@ -31,7 +31,14 @@ export const CategoryQuery= queryType({
             type:"Category",
 
             async resolve(parent,args,context){
-               const categories= await context.prisma.category.findMany()
+                const {userId}=context
+                if (!userId) throw new Error("Login first");
+                
+               const categories= await context.prisma.category.findMany({where:{
+                 user:{
+                    id: userId
+                 }
+               }})
 
                return categories
             }
