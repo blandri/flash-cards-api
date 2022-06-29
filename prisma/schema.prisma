@@ -17,6 +17,7 @@ model User{
   password String
   cards Card[]
   categories Category[]
+  createdAt DateTime @default(now())
 }
 
 model Card{
@@ -28,6 +29,7 @@ model Card{
   done Boolean @default(false)
   ownerId Int?
   user User? @relation(fields: [ownerId], references: [id])        // one to many relationship
+  createdAt DateTime @default(now())
 }
 
 model Category{
@@ -36,4 +38,5 @@ model Category{
   cards Card[] 
   ownerId Int?
   user User? @relation(fields: [ownerId], references: [id]) 
+  createdAt DateTime @default(now())
 }
