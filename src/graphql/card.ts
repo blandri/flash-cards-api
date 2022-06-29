@@ -18,6 +18,7 @@ export const Card = objectType({
             },
         });
         t.string("categoryName"); 
+        t.nonNull.dateTime("createdAt");
         // t.nonNull.list.field("category", {  // 1
         //     type: "Category",
         //     resolve(parent,args,context){
@@ -191,29 +192,31 @@ export const CardMutation= extendType({
 			},
 		});
 
-        // t.nonNull.field("readOneCard",{
-        //     type:"Card",
-        //     args:{
-        //         id: nonNull(intArg()),
-        //     },
+        t.nonNull.field("readOneCard",{
+            type:"Card",
+            args:{
+                id: nonNull(intArg()),
+            },
 
-        //     async resolve(parent,args,context){
-        //         const { userId, prisma } = context;
-		// 		const { id } = args;
+            async resolve(parent,args,context){
+                const { userId, prisma } = context;
+				const { id } = args;
 
-		// 		if (!userId) {
-		// 			throw new Error('Login first');
-		// 		}
+				if (!userId) {
+					throw new Error('Login first');
+				}
 
-        //         const card= await prisma.card.findUnique({
-        //             where:{
-        //                 id
-        //             }
-        //         })
+                const card= await prisma.card.findUnique({
+                    where:{
+                        id
+                    }
+                })
 
-        //         return card
-        //     }
-        // })
+                if(!card) throw new Error("no card found");
+
+                return card
+            }
+        })
     }
 })
 
@@ -222,7 +225,7 @@ export const LinkOrderByInput = inputObjectType({
     definition(t) {
         t.field("details", { type: Sort });
         t.field("title", { type: Sort });
-        // t.field("createdAt", { type: Sort });
+        t.field("createdAt", { type: Sort });
     },
 });
 
