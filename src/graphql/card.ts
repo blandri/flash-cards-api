@@ -1,4 +1,4 @@
-import { arg, extendType, intArg, list, nonNull, nullable, objectType, stringArg } from "nexus";
+import { arg, enumType, extendType, inputObjectType, intArg, list, nonNull, nullable, objectType, stringArg } from "nexus";
 import { Prisma } from '@prisma/client';
 
 export const Card = objectType({
@@ -35,15 +35,34 @@ export const CardQuery = extendType({
     definition(t) {
         t.nonNull.list.nonNull.field("allCards", {  
             type: "Card",
-
+            args: {
+                filter: stringArg(),   // 1
+                orderBy: arg({ type: list(nonNull(LinkOrderByInput)) }),
+            },
             async resolve(parent, args, context) {
                 const {userId}=context
+                
                 if (!userId) throw new Error("Login first");
-               
+                const where = args.filter   // 2
+                    ? {  
+                        AND:[
+                            {ownerId: userId},
+                            {
+                                OR: [
+                                    { details: { contains: args.filter } },
+                                    { title: { contains: args.filter } },
+                                ],
+                            }
+                        ]  
+                        
+                          
+                      }
+                    : {
+                        ownerId: userId
+                    };
                     const card= await context.prisma.card.findMany({
-                        where:{
-                            ownerId: userId
-                        }
+                        where,
+                        orderBy: args?.orderBy as Prisma.Enumerable<Prisma.CardOrderByWithRelationInput> | undefined,
                     })
 
                 return card
@@ -197,4 +216,18 @@ export const CardMutation= extendType({
         // })
     }
 })
+
+export const LinkOrderByInput = inputObjectType({
+    name: "LinkOrderByInput",
+    definition(t) {
+        t.field("details", { type: Sort });
+        t.field("title", { type: Sort });
+        // t.field("createdAt", { type: Sort });
+    },
+});
+
+export const Sort = enumType({
+    name: "Sort",
+    members: ["asc", "desc"],
+});
 
