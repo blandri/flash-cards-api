@@ -30,6 +30,7 @@ declare global {
 
 export interface NexusGenInputs {
   LinkOrderByInput: { // input type
+    createdAt?: NexusGenEnums['Sort'] | null; // Sort
     details?: NexusGenEnums['Sort'] | null; // Sort
     title?: NexusGenEnums['Sort'] | null; // Sort
   }
@@ -55,6 +56,7 @@ export interface NexusGenObjects {
   }
   Card: { // root type
     categoryName?: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     details: string; // String!
     done: boolean; // Boolean!
     id: number; // Int!
@@ -91,6 +93,7 @@ export interface NexusGenFieldTypes {
   }
   Card: { // field return type
     categoryName: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     details: string; // String!
     done: boolean; // Boolean!
     id: number; // Int!
@@ -109,6 +112,7 @@ export interface NexusGenFieldTypes {
     deleteCard: NexusGenRootTypes['Card']; // Card!
     login: NexusGenRootTypes['Auth']; // Auth!
     markDone: NexusGenRootTypes['Card']; // Card!
+    readOneCard: NexusGenRootTypes['Card']; // Card!
     signup: NexusGenRootTypes['Auth']; // Auth!
     updateCard: NexusGenRootTypes['Card']; // Card!
   }
@@ -133,6 +137,7 @@ export interface NexusGenFieldTypeNames {
   }
   Card: { // field return type name
     categoryName: 'String'
+    createdAt: 'DateTime'
     details: 'String'
     done: 'Boolean'
     id: 'Int'
@@ -151,6 +156,7 @@ export interface NexusGenFieldTypeNames {
     deleteCard: 'Card'
     login: 'Auth'
     markDone: 'Card'
+    readOneCard: 'Card'
     signup: 'Auth'
     updateCard: 'Card'
   }
@@ -188,6 +194,9 @@ export interface NexusGenArgTypes {
     markDone: { // args
       id: number; // Int!
     }
+    readOneCard: { // args
+      id: number; // Int!
+    }
     signup: { // args
       email: string; // String!
       name: string; // String!
@@ -203,6 +212,8 @@ export interface NexusGenArgTypes {
     allCards: { // args
       filter?: string | null; // String
       orderBy?: NexusGenInputs['LinkOrderByInput'][] | null; // [LinkOrderByInput!]
+      skip?: number | null; // Int
+      take?: number | null; // Int
     }
   }
 }

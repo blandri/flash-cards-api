@@ -18,6 +18,7 @@ export const Card = objectType({
             },
         });
         t.string("categoryName"); 
+        t.nonNull.dateTime("createdAt");
         // t.nonNull.list.field("category", {  // 1
         //     type: "Category",
         //     resolve(parent,args,context){
@@ -38,6 +39,8 @@ export const CardQuery = extendType({
             args: {
                 filter: stringArg(),   // 1
                 orderBy: arg({ type: list(nonNull(LinkOrderByInput)) }),
+                skip: intArg(),   // 1
+                take: intArg(),
             },
             async resolve(parent, args, context) {
                 const {userId}=context
@@ -47,7 +50,7 @@ export const CardQuery = extendType({
                     ? {  
                         AND:[
                             {ownerId: userId},
-                            {
+                            {                                                       // filter: search by text
                                 OR: [
                                     { details: { contains: args.filter } },
                                     { title: { contains: args.filter } },
@@ -62,7 +65,9 @@ export const CardQuery = extendType({
                     };
                     const card= await context.prisma.card.findMany({
                         where,
-                        orderBy: args?.orderBy as Prisma.Enumerable<Prisma.CardOrderByWithRelationInput> | undefined,
+                        skip: args?.skip as number | undefined,    // 2    pagination: skip(offset, page), take(limit)
+                        take: args?.take as number | undefined,  
+                        orderBy: args?.orderBy as Prisma.Enumerable<Prisma.CardOrderByWithRelationInput> | undefined,   // sort: ascending,descending
                     })
 
                 return card
@@ -191,29 +196,31 @@ export const CardMutation= extendType({
 			},
 		});
 
-        // t.nonNull.field("readOneCard",{
-        //     type:"Card",
-        //     args:{
-        //         id: nonNull(intArg()),
-        //     },
+        t.nonNull.field("readOneCard",{
+            type:"Card",
+            args:{
+                id: nonNull(intArg()),
+            },
 
-        //     async resolve(parent,args,context){
-        //         const { userId, prisma } = context;
-		// 		const { id } = args;
+            async resolve(parent,args,context){
+                const { userId, prisma } = context;
+				const { id } = args;
 
-		// 		if (!userId) {
-		// 			throw new Error('Login first');
-		// 		}
+				if (!userId) {
+					throw new Error('Login first');
+				}
 
-        //         const card= await prisma.card.findUnique({
-        //             where:{
-        //                 id
-        //             }
-        //         })
+                const card= await prisma.card.findUnique({
+                    where:{
+                        id
+                    }
+                })
 
-        //         return card
-        //     }
-        // })
+                if(!card) throw new Error("no card found");
+
+                return card
+            }
+        })
     }
 })
 
@@ -222,7 +229,7 @@ export const LinkOrderByInput = inputObjectType({
     definition(t) {
         t.field("details", { type: Sort });
         t.field("title", { type: Sort });
-        // t.field("createdAt", { type: Sort });
+        t.field("createdAt", { type: Sort });
     },
 });
 

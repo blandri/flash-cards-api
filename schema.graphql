@@ -9,6 +9,7 @@ type Auth {
 
 type Card {
   categoryName: String
+  createdAt: DateTime!
   details: String!
   done: Boolean!
   id: Int!
@@ -29,6 +30,7 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 input LinkOrderByInput {
+  createdAt: Sort
   details: Sort
   title: Sort
 }
@@ -39,12 +41,13 @@ type Mutation {
   deleteCard(id: Int!): Card!
   login(email: String!, password: String!): Auth!
   markDone(id: Int!): Card!
+  readOneCard(id: Int!): Card!
   signup(email: String!, name: String!, password: String!): Auth!
   updateCard(details: String, id: Int!, title: String): Card!
 }
 
 type Query {
-  allCards(filter: String, orderBy: [LinkOrderByInput!]): [Card!]!
+  allCards(filter: String, orderBy: [LinkOrderByInput!], skip: Int, take: Int): [Card!]!
   allCategories: [Category!]!
 }
 
