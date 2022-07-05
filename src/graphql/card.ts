@@ -39,6 +39,8 @@ export const CardQuery = extendType({
             args: {
                 filter: stringArg(),   // 1
                 orderBy: arg({ type: list(nonNull(LinkOrderByInput)) }),
+                skip: intArg(),   // 1
+                take: intArg(),
             },
             async resolve(parent, args, context) {
                 const {userId}=context
@@ -48,7 +50,7 @@ export const CardQuery = extendType({
                     ? {  
                         AND:[
                             {ownerId: userId},
-                            {
+                            {                                                       // filter: search by text
                                 OR: [
                                     { details: { contains: args.filter } },
                                     { title: { contains: args.filter } },
@@ -63,7 +65,9 @@ export const CardQuery = extendType({
                     };
                     const card= await context.prisma.card.findMany({
                         where,
-                        orderBy: args?.orderBy as Prisma.Enumerable<Prisma.CardOrderByWithRelationInput> | undefined,
+                        skip: args?.skip as number | undefined,    // 2    pagination: skip(offset, page), take(limit)
+                        take: args?.take as number | undefined,  
+                        orderBy: args?.orderBy as Prisma.Enumerable<Prisma.CardOrderByWithRelationInput> | undefined,   // sort: ascending,descending
                     })
 
                 return card

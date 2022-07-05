@@ -47,7 +47,7 @@ type Mutation {
 }
 
 type Query {
-  allCards(filter: String, orderBy: [LinkOrderByInput!]): [Card!]!
+  allCards(filter: String, orderBy: [LinkOrderByInput!], skip: Int, take: Int): [Card!]!
   allCategories: [Category!]!
 }
 
